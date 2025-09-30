@@ -1,19 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
+
+  const [count, setCount] = useState<number>(0);
   //jsx
   return (
     <View style={styles.container}>
-      <View >
-        <Text style={styles.header}>hoidanit2</Text>
-        <Text style={styles.parent}>
-          hoidanit1
-          <Text style={styles.child}>bla bla</Text>
-        </Text>
+      <Text style={{ fontSize: 40, fontWeight: "600" }}>
+        count={count}
+      </Text>
+      <View>
+        <Button
+          color={"red"}
+          title='Increase' onPress={() => setCount(count + 1)}
+        />
       </View>
-      <Text style={styles.hello1}>Hello World 1</Text>
-      <Text>Hello World 2</Text>
     </View>
   );
 }
