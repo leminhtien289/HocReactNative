@@ -1,3 +1,4 @@
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { Button, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
@@ -11,12 +12,12 @@ const styles = StyleSheet.create({
     reviewItem: {
         padding: 15,
         backgroundColor: '#ccc',
-        marginBottom: 15
+        margin: 15
     }
 });
 
-const HomeScreen = (props: any) => {
-    const { navigation } = props;
+const HomeScreen = () => {
+    const navigation: NavigationProp<RootStackParamList> = useNavigation();
 
     const [reviews, setReviews] = useState<IReview[]>([
         { id: 1, title: 'React Native', star: 3 },
@@ -36,7 +37,7 @@ const HomeScreen = (props: any) => {
                     renderItem={({ item }) => {
                         return (
                             <TouchableOpacity
-                                onPress={() => navigation.navigate('review-detail')}
+                                onPress={() => navigation.navigate('review-detail', item)}
                             >
                                 <View style={styles.reviewItem}>
                                     <Text>
