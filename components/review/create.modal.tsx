@@ -1,6 +1,7 @@
-import { Button, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Button, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { TextInput } from "react-native-gesture-handler";
+import { useState } from "react";
 
 const styles = StyleSheet.create({
     container: {
@@ -38,10 +39,38 @@ const styles = StyleSheet.create({
 interface IProps {
     modalVisible: boolean;
     setModalVisible: (v: boolean) => void;
+    addNew: any
 }
 
 const CreateModal = (props: IProps) => {
-    const { modalVisible, setModalVisible } = props;
+    const { modalVisible, setModalVisible, addNew } = props;
+    const [title, setTitle] = useState("");
+    const [star, setStar] = useState("");
+
+    const handleSubmit = () => {
+        if (!title) {
+            Alert.alert("Thông tin không hợp lệ", "Nội dung không được để trống")
+            return;
+        }
+
+        if (!star) {
+            Alert.alert("Thông tin không hợp lệ", "Rating không được để trống")
+            return;
+        }
+        addNew({
+            id: randomInteger(2, 2000000),
+            title,
+            star,
+        })
+        setModalVisible(false);
+        setStar("");
+        setTitle("");
+    }
+
+    function randomInteger(min: number, max: number) {
+        return Math.floor(Math.random() * (max - min + 1)) +
+            min;
+    }
 
     return (
         <>
@@ -61,7 +90,11 @@ const CreateModal = (props: IProps) => {
                             name="close"
                             size={24}
                             color="black"
-                            onPress={() => setModalVisible(false)}
+                            onPress={() => {
+                                setModalVisible(false)
+                                setTitle("");
+                                setStar("");
+                            }}
                         />
                     </View>
 
@@ -69,13 +102,18 @@ const CreateModal = (props: IProps) => {
                     <View>
                         <View style={styles.groupInput}>
                             <Text style={styles.text}>Nội dung</Text>
-                            <TextInput style={styles.input} />
+                            <TextInput
+                                value={title}
+                                style={styles.input}
+                                onChangeText={(v) => setTitle(v)}
+                            />
                         </View>
                         <View>
                             <Text style={styles.text}>Rating</Text>
                             <TextInput
                                 style={styles.input}
                                 keyboardType="numeric"
+                                onChangeText={(v) => setStar(v)}
                             />
                         </View>
                     </View>
@@ -85,6 +123,7 @@ const CreateModal = (props: IProps) => {
                         <View style={{ marginTop: 20 }}>
                             <Button
                                 title="Add"
+                                onPress={() => handleSubmit()}
                             />
                         </View>
                     </View>
